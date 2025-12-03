@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Gestión de Usuarios - Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Gestión de Usuarios (localStorage)</h1>
+    <div class="card">
+      <h2>Registrar usuario</h2>
+      <form id="registerForm">
+        <label>Rol:
+          <select id="role">
+            <option value="ABOGADO">Abogado</option>
+            <option value="RECTOR">Rector</option>
+            <option value="ADMIN">Administrador</option>
+          </select>
+        </label>
+        <label>Usuario: <input id="username" required></label>
+        <label>Clave: <input id="password" type="password" required></label>
+        <label>Nombre: <input id="nombre"></label>
+        <label>Email: <input id="email" type="email"></label>
+        <div id="extra"></div>
+        <button type="submit">Registrar</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Iniciar sesión</h2>
+      <form id="loginForm">
+        <label>Usuario: <input id="loginUser" required></label>
+        <label>Clave: <input id="loginPass" type="password" required></label>
+        <button type="submit">Iniciar sesión</button>
+      </form>
+      <div id="loginResult"></div>
+    </div>
+
+    <div class="card">
+      <h2>Usuarios registrados</h2>
+      <pre id="userList"></pre>
+      <button id="clearStorage">Limpiar localStorage</button>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
