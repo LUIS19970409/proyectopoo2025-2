@@ -14,7 +14,8 @@ function saveUsers(users){
 
 function renderUsers(){
   const users = loadUsers();
-  document.getElementById('userList').textContent = users.map(u => JSON.stringify(u)).join('\n');
+  const ul = document.getElementById('userList');
+  if(ul) ul.textContent = users.map(u => JSON.stringify(u)).join('\n');
 }
 
 function setupExtraField(){
@@ -33,6 +34,27 @@ function setupExtraField(){
 document.getElementById('role').addEventListener('change', setupExtraField);
 setupExtraField();
 
+function showView(id){
+  const views = ['loginView','registerView'];
+  views.forEach(v=>{
+    const el = document.getElementById(v);
+    if(!el) return;
+    if(v===id) el.classList.remove('hidden'); else el.classList.add('hidden');
+  });
+}
+
+// Navigation buttons
+// Navigation: support anchors/links inside the styled boxes
+const goRegisterBtn = document.getElementById('goRegister');
+if(goRegisterBtn) goRegisterBtn.addEventListener('click', (ev)=>{
+  ev.preventDefault();
+  const re = document.getElementById('registerError'); if(re) re.textContent = '';
+  const rs = document.getElementById('registerSuccess'); if(rs) rs.classList.add('hidden');
+  showView('registerView');
+});
+const backToLoginBtns = [document.getElementById('backToLogin'), document.getElementById('successBack')];
+backToLoginBtns.forEach(b=>{ if(b) b.addEventListener('click', (ev)=>{ ev.preventDefault(); showView('loginView'); }); });
+
 document.getElementById('registerForm').addEventListener('submit', (e)=>{
   e.preventDefault();
   const role = document.getElementById('role').value;
@@ -42,8 +64,12 @@ document.getElementById('registerForm').addEventListener('submit', (e)=>{
   const email = document.getElementById('email').value;
 
   const users = loadUsers();
+  const errorEl = document.getElementById('registerError');
+  // Validaciones simples
+  if(!username){ if(errorEl) errorEl.textContent = 'El campo Usuario es obligatorio.'; return; }
+  if(!password){ if(errorEl) errorEl.textContent = 'El campo Clave es obligatorio.'; return; }
   if(users.find(u=>u.username===username)){
-    alert('El usuario ya existe');
+    if(errorEl) errorEl.textContent = 'El usuario ya existe';
     return;
   }
   const base = { role, username, password, nombre, email };
@@ -55,6 +81,8 @@ document.getElementById('registerForm').addEventListener('submit', (e)=>{
   saveUsers(users);
   e.target.reset();
   setupExtraField();
+  if(errorEl) errorEl.textContent = '';
+  const rs = document.getElementById('registerSuccess'); if(rs) rs.classList.remove('hidden');
 });
 
 document.getElementById('loginForm').addEventListener('submit', (e)=>{
@@ -65,9 +93,9 @@ document.getElementById('loginForm').addEventListener('submit', (e)=>{
   const found = users.find(x=>x.username===u && x.password===p);
   const out = document.getElementById('loginResult');
   if(found){
-    out.innerHTML = '<strong>Bienvenido:</strong> ' + found.nombre + ' (' + found.role + ')';
+    if(out) out.innerHTML = '<strong>Bienvenido:</strong> ' + found.nombre + ' (' + found.role + ')';
   } else {
-    out.innerHTML = '<span style="color:crimson">Credenciales invalidas</span>';
+    if(out) out.innerHTML = '<span style="color:crimson">Credenciales invalidas</span>';
   }
 });
 
@@ -79,3 +107,5 @@ document.getElementById('clearStorage').addEventListener('click', ()=>{
 });
 
 renderUsers();
+// Start showing login
+showView('loginView');

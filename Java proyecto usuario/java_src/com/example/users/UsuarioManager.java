@@ -11,6 +11,11 @@ public class UsuarioManager {
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public void addUsuario(Usuario u) {
+        // Evitar añadir usuarios con username duplicado
+        if (findByUsername(u.getUsername()) != null) {
+            // ya existe, no agregar
+            return;
+        }
         usuarios.add(u);
     }
 

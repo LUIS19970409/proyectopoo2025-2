@@ -3,45 +3,140 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Gestión de Usuarios - Demo</title>
+  <title>Gestión de Usuarios </title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Gestión de Usuarios (localStorage)</h1>
-    <div class="card">
-      <h2>Registrar usuario</h2>
+    <!-- Styled login/register box with animated spans -->
+    <div class="login-box" id="loginView">
+      <h2>Iniciar sesión</h2>
+      <form id="loginForm">
+        <div class="input-box">
+          <input id="loginUser" required type="text" placeholder=" " />
+          <label>Usuario</label>
+        </div>
+        <div class="input-box">
+          <input id="loginPass" required type="password" placeholder=" " />
+          <label>Clave</label>
+        </div>
+        <div class="forgot-pass">
+          <a href="#">Olvidé mi clave</a>
+        </div>
+        <button class="btn" type="submit">Iniciar sesión</button>
+        <div class="signup-link">
+          <a href="#" id="goRegister">Crear cuenta</a>
+        </div>
+      </form>
+      <div id="loginResult"></div>
+    </div>
+
+    <!-- Register box (hidden) -->
+    <div class="login-box hidden" id="registerView">
+      <h2>Crear cuenta</h2>
       <form id="registerForm">
-        <label>Rol:
+        <div class="input-box">
+          <input id="username" required type="text" placeholder=" " />
+          <label>Usuario</label>
+        </div>
+        <div class="input-box">
+          <input id="password" required type="password" placeholder=" " />
+          <label>Clave</label>
+        </div>
+        <div class="input-box">
+          <input id="nombre" type="text" placeholder=" " />
+          <label>Nombre</label>
+        </div>
+        <div class="input-box">
+          <input id="email" type="email" placeholder=" " />
+          <label>Email</label>
+        </div>
+        <div style="margin:8px 10px">
+          <label style="color:#fff">Rol</label>
           <select id="role">
             <option value="ABOGADO">Abogado</option>
             <option value="RECTOR">Rector</option>
             <option value="ADMIN">Administrador</option>
           </select>
-        </label>
-        <label>Usuario: <input id="username" required></label>
-        <label>Clave: <input id="password" type="password" required></label>
-        <label>Nombre: <input id="nombre"></label>
-        <label>Email: <input id="email" type="email"></label>
-        <div id="extra"></div>
-        <button type="submit">Registrar</button>
+        </div>
+        <div id="extra" style="padding:0 10px"></div>
+        <div id="registerError" class="muted" style="padding:0 10px"></div>
+        <div class="actions" style="padding:0 10px">
+          <button type="submit" class="btn">Registrar</button>
+          <button type="button" id="backToLogin" class="small-btn">Volver a iniciar sesión</button>
+        </div>
       </form>
+
+      <div id="registerSuccess" class="card hidden" style="margin-top:12px">
+        <strong>Registro exitoso</strong>
+        <p class="muted">Tu cuenta se creó correctamente.</p>
+        <div class="actions">
+          <button id="successBack" class="small-btn">Volver a iniciar sesión</button>
+        </div>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>Iniciar sesión</h2>
-      <form id="loginForm">
-        <label>Usuario: <input id="loginUser" required></label>
-        <label>Clave: <input id="loginPass" type="password" required></label>
-        <button type="submit">Iniciar sesión</button>
-      </form>
-      <div id="loginResult"></div>
-    </div>
-
-    <div class="card">
+    <!-- users list -->
+    <div class="card users-card" style="margin-top:18px">
       <h2>Usuarios registrados</h2>
       <pre id="userList"></pre>
       <button id="clearStorage">Limpiar localStorage</button>
+    </div>
+
+    <!-- animated ring + loading ball -->
+    <div class="ring" aria-hidden="true">
+      <div class="loader"></div>
+      <span style="--i:0;"></span>
+      <span style="--i:1;"></span>
+      <span style="--i:2;"></span>
+      <span style="--i:3;"></span>
+      <span style="--i:4;"></span>
+      <span style="--i:5;"></span>
+      <span style="--i:6;"></span>
+      <span style="--i:7;"></span>
+      <span style="--i:8;"></span>
+      <span style="--i:9;"></span>
+      <span style="--i:10;"></span>
+      <span style="--i:11;"></span>
+      <span style="--i:12;"></span>
+      <span style="--i:13;"></span>
+      <span style="--i:14;"></span>
+      <span style="--i:15;"></span>
+      <span style="--i:16;"></span>
+      <span style="--i:17;"></span>
+      <span style="--i:18;"></span>
+      <span style="--i:19;"></span>
+      <span style="--i:20;"></span>
+      <span style="--i:21;"></span>
+      <span style="--i:22;"></span>
+      <span style="--i:23;"></span>
+      <span style="--i:24;"></span>
+      <span style="--i:25;"></span>
+      <span style="--i:26;"></span>
+      <span style="--i:27;"></span>
+      <span style="--i:28;"></span>
+      <span style="--i:29;"></span>
+      <span style="--i:30;"></span>
+      <span style="--i:31;"></span>
+      <span style="--i:32;"></span>
+      <span style="--i:33;"></span>
+      <span style="--i:34;"></span>
+      <span style="--i:35;"></span>
+      <span style="--i:36;"></span>
+      <span style="--i:37;"></span>
+      <span style="--i:38;"></span>
+      <span style="--i:39;"></span>
+      <span style="--i:40;"></span>
+      <span style="--i:41;"></span>
+      <span style="--i:42;"></span>
+      <span style="--i:43;"></span>
+      <span style="--i:44;"></span>
+      <span style="--i:45;"></span>
+      <span style="--i:46;"></span>
+      <span style="--i:47;"></span>
+      <span style="--i:48;"></span>
+      <span style="--i:49;"></span>
     </div>
   </div>
   <script src="app.js"></script>
