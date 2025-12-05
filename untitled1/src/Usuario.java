@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Usuario {
     private JPanel panel1;
@@ -14,4 +16,13 @@ public class Usuario {
     private JTextField txtRegistarUsuario;
     private JTextField txtCorreoRegistrar;
     private JTextField txtCedulaRegistrar;
+
+
+    public Usuario() {
+        registrarButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("la sapa");
+            }
+        });
+    }
 }

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Starting…</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body class="animated-bg">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
+            <div id="startupLoader" class="loader-wrapper" aria-hidden="false">
+                <span class="loader-letter">G</span>
+                <span class="loader-letter">e</span>
+                <span class="loader-letter">n</span>
+                <span class="loader-letter">e</span>
+                <span class="loader-letter">r</span>
+                <span class="loader-letter">a</span>
+                <span class="loader-letter">t</span>
+                <span class="loader-letter">i</span>
+                <span class="loader-letter">n</span>
+                <span class="loader-letter">g</span>
+                <div class="loader"></div>
+            </div>
+        </div>
+
+        <script>
+            
+            document.addEventListener('DOMContentLoaded', function () {
+                try {
+                    var shown = false;
+                    try { shown = !!sessionStorage.getItem('startup_shown_v1'); } catch (e) { shown = false; }
+                    function go() {
+                        try { window.location.href = 'index.html'; } catch (e) { /* noop */ }
+                    }
+                    if (shown) {
+                        // already shown this session — go immediately
+                        go();
+                    } else {
+                        // show for 2 seconds, then mark and go
+                        setTimeout(function () {
+                            try { sessionStorage.setItem('startup_shown_v1', '1'); } catch (e) { }
+                            go();
+                        }, 2000);
+                    }
+                } catch (e) { go(); }
+            });
+        </script>
+        <script src="animated-bg.js"></script>
+    </body>
+</html>

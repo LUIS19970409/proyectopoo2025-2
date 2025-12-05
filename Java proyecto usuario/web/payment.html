@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pasarela de pago</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body{background:#0b0b0c;color:#ddd;font-family:Inter,system-ui,Arial,sans-serif}
+    .wrap{max-width:520px;margin:48px auto;padding:20px}
+    .card{background:linear-gradient(180deg,#0f1113 0%,#0b0b0c 100%);border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.03)}
+    label{display:block;font-size:0.9rem;color:#9aa}
+    input,select{width:100%;padding:10px;border-radius:8px;border:1px solid #222;background:#0f1113;color:#ddd;margin-top:6px}
+    .row{display:flex;gap:12px;align-items:flex-start}
+    /* ensure each column stacks label+input and aligns to top */
+    .row > div, .row > [style^="width"]{
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+    }
+    .row > div label, .row > [style^="width"] label{ margin-bottom:6px }
+    .small-btn{background:#111;color:#ddd;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;display:inline-flex;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:34px}
+    .title{color:#0ef;text-align:center;margin-bottom:8px}
+    .note{color:#9aa;font-size:0.9rem;margin-top:6px}
+    .error{color:#ff7b7b;margin-top:6px}
+  </style>
+</head>
+<body class="animated-bg">
+  <div class="wrap">
+    <h2 class="title">Pasarela de pago</h2>
+    <div class="card">
+      <div id="planSummary" style="margin-bottom:12px;color:#cfe">Cargando...</div>
+      <form id="paymentForm">
+        <label>Nombre en la tarjeta</label>
+        <input id="cardName" autocomplete="cc-name" required>
+
+        <label>Número de tarjeta</label>
+        <input id="cardNumber" autocomplete="cc-number" inputmode="numeric" pattern="[0-9]{16}" maxlength="16" placeholder="16 dígitos" required oninput="this.value = this.value.replace(/\D/g,'').slice(0,16)">
+
+        <div class="row" style="margin-top:8px">
+          <div style="flex:1">
+            <label>Expiración - Mes</label>
+            <input id="cardExpMonth" placeholder="MM" maxlength="2" inputmode="numeric" required oninput="this.value = this.value.replace(/\D/g,'').slice(0,2)">
+          </div>
+          <div style="flex:1">
+            <label>Expiración - Año </label>
+            <input id="cardExpYear" placeholder="YY" maxlength="2" inputmode="numeric" required oninput="this.value = this.value.replace(/\D/g,'').slice(0,2)">
+          </div>
+          <div style="width:120px">
+            <label>CVV</label>
+            <input id="cardCvv" placeholder="123" maxlength="3" inputmode="numeric" required oninput="this.value = this.value.replace(/\D/g,'').slice(0,3)">
+          </div>
+        </div>
+
+        <div class="note">Pago simulado. No se cargará ninguna tarjeta.</div>
+        <div id="payError" class="error" aria-live="polite"></div>
+        <div style="display:flex;justify-content:space-between;margin-top:12px">
+          <button type="button" id="cancelPay" class="small-btn">Cancelar</button>
+          <button type="submit" id="payBtn" class="small-btn">Pagar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="payment.js"></script>
+  <script src="animated-bg.js"></script>
+</body>
+</html>

@@ -6,8 +6,13 @@
   <title>Gestión de Usuarios </title>
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Page-specific override: keep cards dark/transparent on the login page
+       so no large white background appears behind the login box. */
+    .card{ background: transparent !important; box-shadow: none !important; }
+  </style>
 </head>
-<body>
+<body class="animated-bg">
   <div class="container">
     <!-- Styled login/register box with animated spans -->
     <div class="login-box" id="loginView">
@@ -21,12 +26,9 @@
           <input id="loginPass" required type="password" placeholder=" " />
           <label>Clave</label>
         </div>
-        <div class="forgot-pass">
-          <a href="#">Olvidé mi clave</a>
-        </div>
         <button class="btn" type="submit">Iniciar sesión</button>
         <div class="signup-link">
-          <a href="#" id="goRegister">Crear cuenta</a>
+          <button type="button" id="goRegister" class="small-btn">Crear cuenta</button>
         </div>
       </form>
       <div id="loginResult"></div>
@@ -63,18 +65,15 @@
         <div id="extra" style="padding:0 10px"></div>
         <div id="registerError" class="muted" style="padding:0 10px"></div>
         <div class="actions" style="padding:0 10px">
-          <button type="submit" class="btn">Registrar</button>
+          <button type="submit" class="btn btn--block">Registrar</button>
           <button type="button" id="backToLogin" class="small-btn">Volver a iniciar sesión</button>
         </div>
       </form>
 
       <div id="registerSuccess" class="card hidden" style="margin-top:12px">
-        <strong>Registro exitoso</strong>
-        <p class="muted">Tu cuenta se creó correctamente.</p>
-        <div class="actions">
-          <button id="successBack" class="small-btn">Volver a iniciar sesión</button>
+          <strong>Registro exitoso</strong>
+          <p class="muted">Tu cuenta se creó correctamente.</p>
         </div>
-      </div>
     </div>
 
     <!-- users list -->
@@ -84,9 +83,8 @@
       <button id="clearStorage">Limpiar localStorage</button>
     </div>
 
-    <!-- animated ring + loading ball -->
+    <!-- decorative ring (spinning segments) restored; loader blob omitted to avoid startup artifact -->
     <div class="ring" aria-hidden="true">
-      <div class="loader"></div>
       <span style="--i:0;"></span>
       <span style="--i:1;"></span>
       <span style="--i:2;"></span>
@@ -139,6 +137,8 @@
       <span style="--i:49;"></span>
     </div>
   </div>
+  
   <script src="app.js"></script>
+  <script src="animated-bg.js"></script>
 </body>
 </html>

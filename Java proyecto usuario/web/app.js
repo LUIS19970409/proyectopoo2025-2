@@ -1,6 +1,8 @@
 // Simple web UI that stores users in localStorage
 const LS_KEY = 'usuarios_demo_v1';
 
+const CURRENT_USER_KEY = 'current_user_session';
+
 function loadUsers(){
   const raw = localStorage.getItem(LS_KEY);
   if(!raw) return [];
@@ -18,16 +20,24 @@ function renderUsers(){
   if(ul) ul.textContent = users.map(u => JSON.stringify(u)).join('\n');
 }
 
+function ensureAdmin(){
+  const users = loadUsers();
+  const adminExists = users.find(u => u.username === 'admin');
+  if(!adminExists){
+    users.push({ username: 'admin', password: 'admin123', role: 'ADMIN', nombre: 'Administrador', email: '' });
+    saveUsers(users);
+  }
+}
+
 function setupExtraField(){
   const role = document.getElementById('role').value;
   const extra = document.getElementById('extra');
   extra.innerHTML = '';
-  if(role === 'ABOGADO'){
-    extra.innerHTML = '<label>Especialidad: <input id="especialidad"></label>';
-  } else if(role === 'RECTOR'){
-    extra.innerHTML = '<label>Facultad: <input id="facultad"></label>';
+  // keep extra fields minimal: only ADMIN gets 'nivel'
+  if(role === 'ADMIN'){
+    extra.innerHTML = '<div class="input-box"><input id="nivel" type="number" value="1" placeholder=" "><label>Nivel (num)</label></div>';
   } else {
-    extra.innerHTML = '<label>Nivel (num): <input id="nivel" type="number" value="1"></label>';
+    extra.innerHTML = '';
   }
 }
 
@@ -68,14 +78,17 @@ document.getElementById('registerForm').addEventListener('submit', (e)=>{
   // Validaciones simples
   if(!username){ if(errorEl) errorEl.textContent = 'El campo Usuario es obligatorio.'; return; }
   if(!password){ if(errorEl) errorEl.textContent = 'El campo Clave es obligatorio.'; return; }
+  if(!nombre || !nombre.trim()){ if(errorEl) errorEl.textContent = 'El campo Nombre es obligatorio.'; return; }
+  const emailTrim = (email||'').trim();
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!emailTrim || !emailRe.test(emailTrim)){ if(errorEl) errorEl.textContent = 'Introduce un correo válido.'; return; }
   if(users.find(u=>u.username===username)){
     if(errorEl) errorEl.textContent = 'El usuario ya existe';
     return;
   }
   const base = { role, username, password, nombre, email };
-  if(role==='ABOGADO') base.especialidad = document.getElementById('especialidad').value || '';
-  if(role==='RECTOR') base.facultad = document.getElementById('facultad').value || '';
-  if(role==='ADMIN') base.nivel = parseInt(document.getElementById('nivel').value) || 1;
+  // remove facultad from stored user data; only include nivel for ADMIN
+  if(role==='ADMIN') base.nivel = parseInt(document.getElementById('nivel')?document.getElementById('nivel').value:1) || 1;
 
   users.push(base);
   saveUsers(users);
@@ -93,7 +106,21 @@ document.getElementById('loginForm').addEventListener('submit', (e)=>{
   const found = users.find(x=>x.username===u && x.password===p);
   const out = document.getElementById('loginResult');
   if(found){
-    if(out) out.innerHTML = '<strong>Bienvenido:</strong> ' + found.nombre + ' (' + found.role + ')';
+    // store current session username (simple session)
+    try{ sessionStorage.setItem(CURRENT_USER_KEY, found.username); }catch(e){}
+    if(found.username === 'admin'){
+      // redirect admin to admin panel
+      window.location.href = 'admin.html';
+      return;
+    }
+    // If user already has a plan, send them to the menu (no payment)
+    if(found.plan && found.plan !== ''){
+      window.location.href = 'menu.html';
+      return;
+    }
+    // otherwise let them choose a plan on the dashboard
+    window.location.href = 'dashboard.html';
+    return;
   } else {
     if(out) out.innerHTML = '<span style="color:crimson">Credenciales invalidas</span>';
   }
@@ -109,3 +136,5 @@ document.getElementById('clearStorage').addEventListener('click', ()=>{
 renderUsers();
 // Start showing login
 showView('loginView');
+// Ensure admin user exists
+ensureAdmin();

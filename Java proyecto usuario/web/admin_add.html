@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin - Agregar Usuario</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="animated-bg">
+  <div class="container admin-panel">
+    <div class="login-box" style="width:880px; max-width:95%;">
+      <h2>Agregar usuario</h2>
+      <p class="muted">Crea un nuevo usuario que se guardará en LocalStorage.</p>
+      <form id="adminAddForm" style="padding:6px; max-width:640px; margin:0 auto">
+        <div class="input-box"><input id="a_username" placeholder=" " required><label>Usuario</label></div>
+        <div class="input-box"><input id="a_password" type="password" placeholder=" " required><label>Clave</label></div>
+        <div class="input-box"><input id="a_nombre" placeholder=" "><label>Nombre</label></div>
+        <div class="input-box"><input id="a_email" type="email" placeholder=" "><label>Email</label></div>
+        <div style="margin:8px 0"><label style="color:#fff">Rol</label>
+          <select id="a_role">
+            <option value="ABOGADO">Abogado</option>
+            <option value="RECTOR">Rector</option>
+            <option value="ADMIN">Administrador</option>
+          </select>
+        </div>
+        <div class="actions" style="margin-top:12px;justify-content:space-between;">
+          <a href="admin_manage.html"><button type="button" class="small-btn">Volver</button></a>
+          <button type="submit" class="btn">Agregar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+    <script src="admin.js"></script>
+    <script src="animated-bg.js"></script>
+</body>
+</html>

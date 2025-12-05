@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin - Gestionar Usuarios</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="animated-bg">
+  <div class="container admin-panel">
+    <div class="login-box" style="width:880px; max-width:95%;">
+      <h2>Panel Admin — Gestionar usuarios</h2>
+      <p class="muted">Administrador: puedes ver, agregar y borrar usuarios almacenados en LocalStorage.</p>
+      <div style="margin:12px 6px">
+        <button id="btnRefresh" class="small-btn">Refrescar lista</button>
+        <button id="btnClearAll" class="small-btn">Borrar todos</button>
+        <button id="btnLogout" class="small-btn">Cerrar sesión</button>
+      </div>
+      <h3 style="margin:8px 6px">Usuarios</h3>
+      <div id="usersTableWrapper" style="padding:6px; max-height:420px; overflow:auto; background:rgba(0,0,0,0.25); border-radius:8px;">
+        <table id="usersTable" style="width:100%; border-collapse:collapse; color:#fff;">
+          <thead>
+            <tr style="text-align:left; border-bottom:1px solid rgba(255,255,255,0.06)"><th>Usuario</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Acciones</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:16px; text-align:right;">
+        <a href="admin_add.html"><button class="menu-btn" style="padding:10px 14px">Agregar usuario</button></a>
+      </div>
+
+    </div>
+  </div>
+  <script src="admin.js"></script>
+   <script src="animated-bg.js"></script>
+</body>
+</html>

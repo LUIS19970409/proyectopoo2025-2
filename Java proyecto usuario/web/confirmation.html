@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Confirmación</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body{background:#0b0b0c;color:#ddd;font-family:Inter,system-ui,Arial,sans-serif}
+    .wrap{max-width:720px;margin:80px auto;padding:20px;text-align:center}
+    .box{background:#0f1113;padding:30px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+    .ok{color:#6ff;font-size:1.2rem;font-weight:700}
+    .muted{color:#9aa;margin-top:8px}
+    .small-btn{background:#111;color:#ddd;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;margin-top:18px;display:inline-flex;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:34px}
+  </style>
+</head>
+<body class="animated-bg">
+  <div class="wrap">
+    <div class="box">
+      <div id="heading" class="ok">Confirmación</div>
+      <div id="detail" class="muted">Procesando...</div>
+      <div>
+        <button id="toDashboard" class="small-btn">Ir al dashboard</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    function get(q){ return new URLSearchParams(location.search).get(q); }
+    const plan = get('plan');
+    const paid = get('paid');
+    const amount = get('amount')||'';
+    const heading = document.getElementById('heading');
+    const detail = document.getElementById('detail');
+    if(plan==='gratuito'){
+      heading.textContent = 'Plan gratuito activado';
+      detail.textContent = 'Has seleccionado el Plan Gratuito. Ya puedes usar las funcionalidades correspondientes.';
+    } else if(paid==='1'){
+      heading.textContent = 'Pago exitoso';
+      detail.textContent = `Se ha procesado un pago de $${amount} para ${plan==='institucional'?'Plan Institucional':'Plan Premium'}. Gracias.`;
+    } else {
+      heading.textContent = 'Operación completada';
+      detail.textContent = 'Tu selección fue guardada.';
+    }
+    document.getElementById('toDashboard').addEventListener('click', ()=>{ window.location.href='menu.html'; });
+  </script>
+</body>
+</html>

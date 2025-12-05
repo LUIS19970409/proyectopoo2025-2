@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Panel Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="animated-bg">
+  <div class="container admin-panel">
+    <div class="login-box" style="width:720px; max-width:95%; text-align:center; padding:28px;">
+      <h2>Panel Admin</h2>
+      <p class="muted">Accede con tus credenciales de administrador para gestionar usuarios.</p>
+
+      <!-- Admin login form (shown when not authenticated) -->
+      <div id="adminLogin">
+        <form id="adminLoginForm" style="display:flex;flex-direction:column;gap:12px;align-items:center;max-width:360px;margin:12px auto">
+          <input id="admin_user" placeholder="Usuario" style="width:100%;padding:10px;border-radius:8px;background:#0f1113;border:1px solid #222;color:#ddd">
+          <input id="admin_pass" placeholder="Clave" type="password" style="width:100%;padding:10px;border-radius:8px;background:#0f1113;border:1px solid #222;color:#ddd">
+          <div style="display:flex;gap:10px;justify-content:center;width:100%">
+            <button type="submit" class="menu-btn" style="padding:8px 14px">Iniciar sesión</button>
+            <button type="button" id="adminCancel" class="small-btn">Cancelar</button>
+          </div>
+          <div id="adminLoginError" style="color:#ff7b7b;margin-top:6px;display:none"></div>
+        </form>
+      </div>
+
+      <!-- Admin actions (shown after successful login) -->
+      <div id="adminActions" style="display:none;margin-top:12px">
+        <div style="margin:18px 6px">
+          <a id="manageLink" href="admin_manage.html"><button class="menu-btn" style="padding:12px 20px; font-size:16px">Gestionar usuarios</button></a>
+        </div>
+        <div style="margin-top:14px">
+          <button id="btnLogout" class="small-btn">Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Admin landing logic: show login if not authenticated, else show actions
+    (function(){
+      const LS_KEY = 'usuarios_demo_v1';
+      const CURRENT_USER_KEY = 'current_user_session';
+
+      function getStoredUsers(){
+        try{ const raw = localStorage.getItem(LS_KEY); return raw?JSON.parse(raw):[]; }catch(e){ return []; }
+      }
+
+      const adminActions = document.getElementById('adminActions');
+      const adminLogin = document.getElementById('adminLogin');
+      const loginForm = document.getElementById('adminLoginForm');
+      const errorEl = document.getElementById('adminLoginError');
+
+      function showActions(){ adminLogin.style.display = 'none'; adminActions.style.display = 'block'; }
+      function showLogin(){ adminLogin.style.display = 'block'; adminActions.style.display = 'none'; }
+
+      // If already logged in as admin, reveal actions
+      try{
+        const cur = sessionStorage.getItem(CURRENT_USER_KEY);
+        if(cur && cur === 'admin'){ showActions(); }
+        else { showLogin(); }
+      }catch(e){ showLogin(); }
+
+      // Login submit handler: validate against stored users or fallback default
+      loginForm.addEventListener('submit', (ev)=>{
+        ev.preventDefault();
+        const u = document.getElementById('admin_user').value.trim();
+        const p = document.getElementById('admin_pass').value;
+        const users = getStoredUsers();
+        const adminUser = users.find(x => x.username === 'admin');
+        const valid = (adminUser && adminUser.password === p && u === 'admin') || (u === 'admin' && p === 'admin123' && !adminUser);
+        if(valid){
+          try{ sessionStorage.setItem(CURRENT_USER_KEY, 'admin'); }catch(e){}
+          errorEl.style.display = 'none';
+          showActions();
+        } else {
+          errorEl.textContent = 'Credenciales inválidas';
+          errorEl.style.display = 'block';
+        }
+      });
+
+      // Cancel resets form
+      const adminCancel = document.getElementById('adminCancel');
+      if(adminCancel) adminCancel.addEventListener('click', ()=>{ document.getElementById('admin_user').value=''; document.getElementById('admin_pass').value=''; errorEl.style.display='none'; });
+
+      // Logout handler
+      const btnLogout = document.getElementById('btnLogout');
+      if(btnLogout){ btnLogout.addEventListener('click', ()=>{ try{ sessionStorage.removeItem(CURRENT_USER_KEY); }catch(e){}; showLogin(); }); }
+    })();
+  </script>
+  <script src="animated-bg.js"></script>
+</body>
+</html>

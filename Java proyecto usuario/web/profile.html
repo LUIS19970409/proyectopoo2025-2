@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mi perfil</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body{background:#0b0b0c;color:#ddd;font-family:Inter,system-ui,Arial,sans-serif}
+    .wrap{max-width:760px;margin:48px auto;padding:20px}
+    .card{background:linear-gradient(180deg,#0f1113 0%,#0b0b0c 100%);border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.03)}
+    label{display:block;font-size:0.9rem;color:#9aa}
+    input,select{width:100%;padding:10px;border-radius:8px;border:1px solid #222;background:#0f1113;color:#ddd;margin-top:6px}
+    .row{display:flex;gap:12px}
+    .actions{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+    .small-btn{background:#111;color:#ddd;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;display:inline-flex;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:34px}
+    .title{color:#0ef;text-align:center;margin-bottom:8px}
+    .plan-badge{background:rgba(14,239,255,0.06);color:#0ef;padding:6px 10px;border-radius:999px;font-weight:600}
+  </style>
+</head>
+<body class="animated-bg">
+  <div class="wrap">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button id="backBtn" class="small-btn">Volver</button></div>
+    <h2 class="title">Mi perfil</h2>
+    <div class="card">
+      <form id="profilePageForm">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div>
+            <label>Usuario</label>
+            <input id="pUsername" disabled>
+          </div>
+          <div>
+            <label>Plan actual</label>
+            <div style="margin-top:6px"><span id="pPlanBadge" class="plan-badge">Sin plan</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Nombre</label>
+          <input id="pNombre">
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Correo</label>
+          <input id="pEmail">
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Seleccionar plan</label>
+          <select id="pPlanSelect">
+            <option value="">Sin plan</option>
+            <option value="gratuito">Plan Gratuito</option>
+            <option value="institucional">Plan Institucional</option>
+            <option value="premium">Plan Premium</option>
+          </select>
+        </div>
+
+        <div class="actions">
+          <div>
+            <button type="button" id="logoutBtn" class="small-btn">Cerrar sesión</button>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button type="button" id="cancelBtn" class="small-btn">Cancelar</button>
+            <button type="submit" id="saveBtn" class="small-btn">Guardar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="profile.js"></script>
+    <script src="animated-bg.js"></script>
+</body>
+</html>

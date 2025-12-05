@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Dashboard layout: center three Uiverse cards */
+    .dashboard{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+    .cards-row{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;align-items:flex-start}
+    .card-wrapper{display:flex;align-items:center;justify-content:center}
+    /* adapt provided Uiverse card CSS inside dashboard scope */
+    .card-container{width:260px;background:linear-gradient(to top right,#975af4,#2f7cf8 40%,#78aafa 65%,#934cff 100%);padding:4px;border-radius:32px;display:flex;flex-direction:column;height:380px;box-sizing:border-box}
+    .card-container .title-card{display:flex;align-items:center;padding:16px 18px;justify-content:space-between;color:#fff}
+    .card-container .title-card p{font-size:14px;font-weight:600;font-style:italic;text-shadow:2px 2px 6px #2975ee}
+    .card-container .card-content{width:100%;background-color:#161a20;border-radius:30px;color:#838383;font-size:12px;padding:18px;display:flex;flex-direction:column;gap:14px;flex:1;justify-content:space-between;min-height:0}
+    .card-container .card-content .title{font-weight:600;color:#bab9b9}
+    .card-container .card-content .plain :nth-child(1){font-size:36px;color:#fff}
+    .card-container .card-content .description{color:#a7a7a7;font-size:0.95rem}
+    .card-container .card-content .card-btn{background:linear-gradient(4deg,#975af4,#2f7cf8 40%,#78aafa 65%,#934cff 100%);padding:8px;border:none;width:100%;border-radius:8px;color:white;font-size:12px;transition:all 0.3s ease-in-out;cursor:pointer;box-shadow:inset 0 2px 4px rgba(255,255,255,0.6)}
+    .card-container .card-content .card-btn:hover{color:#ffffff;text-shadow:0 0 8px #fff;transform:scale(1.03)}
+    @media (max-width:900px){.cards-row{gap:16px}.card-container{width:220px;height:360px}.card-container .card-content{padding:14px}}
+    /* Visual improvements and animations */
+    :root{--accent:#0ef;--muted:#9aa;--bg-card:#0f1113}
+    .wrap{max-width:1100px;margin:20px auto;padding:6px}
+    .user-message{white-space:pre-wrap;background:linear-gradient(180deg,rgba(3,7,12,0.6),rgba(6,10,14,0.7));border-right:4px solid var(--accent);padding:14px;margin-top:12px;border-radius:8px;color:#9fe;text-align:right;box-shadow:0 6px 18px rgba(0,0,0,0.6)}
+    .chat-panel{background:rgba(8,10,12,0.6);padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.02)}
+    .divider{width:1px;background:rgba(255,255,255,0.04);align-self:stretch;margin:6px 0}
+    .prompt-large{min-height:140px;font-size:15px;padding:14px}
+    #aiResponses{min-height:260px;max-height:56vh;overflow:auto;padding:12px;background:#0d0d0e;border:1px solid rgba(255,255,255,0.03);border-radius:8px}
+    .small-btn{background:linear-gradient(180deg,#0ef,#3af);color:#fff;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:600;transition:transform .15s ease,box-shadow .15s ease;display:inline-flex;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:34px}
+    .small-btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(9,14,20,0.6)}
+    .fade-in{animation:fadeIn .26s ease both}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    /* layout adjustments to mirror sketch: chat left, examples right */
+    .ai-chat-wrap{display:flex;gap:20px;align-items:flex-start;justify-content:space-between}
+    /* make left chat column smaller and right examples larger (match sketch) */
+    .ai-chat-left{flex:0 0 38%;min-width:260px;max-width:42%}
+    .ai-examples{flex:0 0 56%;width:56%;max-width:720px;display:flex;flex-direction:column}
+    .ai-examples select{flex:1;height:56vh;box-sizing:border-box}
+    #aiResponses{min-height:260px;max-height:56vh;overflow:auto;padding:12px;background:#0d0d0e;border:1px solid rgba(255,255,255,0.03);border-radius:8px}
+  </style>
+</head>
+<body class="animated-bg">
+  <div class="dashboard">
+    <div style="text-align:center; width:100%">
+      <div style="position:relative;margin-bottom:6px">
+        <h1 id="pageTitle" style="color:#0ef;text-align:center;margin:0">Escoge tu plan</h1>
+        <div id="userArea" style="position:fixed;right:20px;top:10px;z-index:60;">
+          <button id="userIcon" title="Cuenta" style="width:36px;height:36px;border-radius:50%;border:none;background:linear-gradient(180deg,#0ef,#3af);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.4)"> 
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zM4 22c0-4 4-7 8-7s8 3 8 7v1H4v-1z" fill="#001"></path></svg>
+          </button>
+          <div id="userMenu" style="position:absolute;right:0;top:44px;background:#111;border:1px solid rgba(255,255,255,0.06);padding:8px;border-radius:8px;display:none;min-width:140px;box-shadow:0 8px 24px rgba(0,0,0,0.6);z-index:40">
+            <button id="menuProfile" class="small-btn" style="display:block;width:100%;text-align:left;margin-bottom:6px">Mi perfil</button>
+            <button id="menuLogout" class="small-btn" style="display:block;width:100%;text-align:left">Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+      <div class="cards-row">
+        <div class="card-wrapper">
+          <div class="card-container">
+            <div class="title-card">
+              <p>Plan Gratuito</p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M10.277 16.515c.005-.11.187-.154.24-.058c.254.45.686 1.111 1.177 1.412c.49.3 1.275.386 1.791.408c.11.005.154.186.058.24c-.45.254-1.111.686-1.412 1.176s-.386 1.276-.408 1.792c-.005.11-.187.153-.24.057c-.254-.45-.686-1.11-1.176-1.411s-1.276-.386-1.792-.408c-.11-.005-.153-.187-.057-.24c.45-.254 1.11-.686 1.411-1.177c.301-.49.386-1.276.408-1.791m8.215-1c-.008-.11-.2-.156-.257-.062c-.172.283-.421.623-.697.793s-.693.236-1.023.262c-.11.008-.155.2-.062.257c.283.172.624.42.793.697s.237.693.262 1.023c.009.11.2.155.258.061c.172-.282.42-.623.697-.792s.692-.237 1.022-.262c.11-.009.156-.2.062-.258c-.283-.172-.624-.42-.793-.697s-.236-.692-.262-1.022M14.704 4.002l-.242-.306c-.937-1.183-1.405-1.775-1.95-1.688c-.545.088-.806.796-1.327 2.213l-.134.366c-.149.403-.223.604-.364.752c-.143.148-.336.225-.724.38l-.353.141l-.248.1c-1.2.48-1.804.753-1.881 1.283c-.082.565.49 1.049 1.634 2.016l.296.25c.325.275.488.413.58.6c.094.187.107.403.134.835l.024.393c.093 1.52.14 2.28.634 2.542s1.108-.147 2.336-.966l.318-.212c.35-.233.524-.35.723-.381c.2-.032.402.024.806.136l.368.102c1.422.394 2.133.591 2.52.188c.388-.403.196-1.14-.19-2.613l-.099-.381c-.11-.419-.164-.628-.134-.835s.142-.389.365-.752l.203-.33c.786-1.276 1.179-1.914.924-2.426c-.254-.51-.987-.557-2.454-.648l-.379-.024c-.417-.026-.625-.039-.806-.135c-.18-.096-.314-.264-.58-.6m-5.869 9.324C6.698 14.37 4.919 16.024 4.248 18c-.752-4.707.292-7.747 1.965-9.637c.144.295.332.539.5.73c.35.396.852.82 1.362 1.251l.367.31l.17.145c.005.064.01.14.015.237l.03.485c.04.655.08 1.294.178 1.805"></path></svg>
+            </div>
+            <div class="card-content">
+              <p class="title">Plan Gratuito</p>
+              <p class="plain"><span>30 consultas</span><span>/ mes</span></p>
+              <p class="description">No genera documentos. Sin asesoría.</p>
+              <button class="card-btn" data-plan="gratuito">Elegir Plan Gratuito</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="card-container">
+            <div class="title-card"><p>Plan institucional</p><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M10.277 16.515c.005-.11.187-.154.24-.058c.254.45.686 1.111 1.177 1.412c.49.3 1.275.386 1.791.408c.11.005.154.186.058.24c-.45.254-1.111.686-1.412 1.176s-.386 1.276-.408 1.792c-.005.11-.187.153-.24.057c-.254-.45-.686-1.11-1.176-1.411s-1.276-.386-1.792-.408c-.11-.005-.153-.187-.057-.24c.45-.254 1.11-.686 1.411-1.177c.301-.49.386-1.276.408-1.791m8.215-1c-.008-.11-.2-.156-.257-.062c-.172.283-.421.623-.697.793s-.693.236-1.023.262c-.11.008-.155.2-.062.257c.283.172.624.42.793.697s.237.693.262 1.023c.009.11.2.155.258.061c.172-.282.42-.623.697-.792s.692-.237 1.022-.262c.11-.009.156-.2.062-.258c-.283-.172-.624-.42-.793-.697s-.236-.692-.262-1.022M14.704 4.002l-.242-.306c-.937-1.183-1.405-1.775-1.95-1.688c-.545.088-.806.796-1.327 2.213l-.134.366c-.149.403-.223.604-.364.752c-.143.148-.336.225-.724.38l-.353.141l-.248.1c-1.2.48-1.804.753-1.881 1.283c-.082.565.49 1.049 1.634 2.016l.296.25c.325.275.488.413.58.6c.094.187.107.403.134.835l.024.393c.093 1.52.14 2.28.634 2.542s1.108-.147 2.336-.966l.318-.212c.35-.233.524-.35.723-.381c.2-.032.402.024.806.136l.368.102c1.422.394 2.133.591 2.52.188c.388-.403.196-1.14-.19-2.613l-.099-.381c-.11-.419-.164-.628-.134-.835s.142-.389.365-.752l.203-.33c.786-1.276 1.179-1.914.924-2.426c-.254-.51-.987-.557-2.454-.648l-.379-.024c-.417-.026-.625-.039-.806-.135c-.18-.096-.314-.264-.58-.6m-5.869 9.324C6.698 14.37 4.919 16.024 4.248 18c-.752-4.707.292-7.747 1.965-9.637c.144.295.332.539.5.73c.35.396.852.82 1.362 1.251l.367.31l.17.145c.005.064.01.14.015.237l.03.485c.04.655.08 1.294.178 1.805"></path></svg></div>
+            <div class="card-content"><p class="title">Plan institucional</p><p class="plain"><span>50 consultas</span><span>/ mes</span></p><p class="description">Genera 5 documentos al mes. 2 asesorías mensuales.</p><button class="card-btn" data-plan="institucional">Elegir Plan Institucional</button></div>
+          </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="card-container">
+            <div class="title-card"><p>Plan Premium</p><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M10.277 16.515c.005-.11.187-.154.24-.058c.254.45.686 1.111 1.177 1.412c.49.3 1.275.386 1.791.408c.11.005.154.186.058.24c-.45.254-1.111.686-1.412 1.176s-.386 1.276-.408 1.792c-.005.11-.187.153-.24.057c-.254-.45-.686-1.11-1.176-1.411s-1.276-.386-1.792-.408c-.11-.005-.153-.187-.057-.24c.45-.254 1.11-.686 1.411-1.177c.301-.49.386-1.276.408-1.791m8.215-1c-.008-.11-.2-.156-.257-.062c-.172.283-.421.623-.697.793s-.693.236-1.023.262c-.11.008-.155.2-.062.257c.283.172.624.42.793.697s.237.693.262 1.023c.009.11.2.155.258.061c.172-.282.42-.623.697-.792s.692-.237 1.022-.262c.11-.009.156-.2.062-.258c-.283-.172-.624-.42-.793-.697s-.236-.692-.262-1.022M14.704 4.002l-.242-.306c-.937-1.183-1.405-1.775-1.95-1.688c-.545.088-.806.796-1.327 2.213l-.134.366c-.149.403-.223.604-.364.752c-.143.148-.336.225-.724.38l-.353.141l-.248.1c-1.2.48-1.804.753-1.881 1.283c-.082.565.49 1.049 1.634 2.016l.296.25c.325.275.488.413.58.6c.094.187.107.403.134.835l.024.393c.093 1.52.14 2.28.634 2.542s1.108-.147 2.336-.966l.318-.212c.35-.233.524-.35.723-.381c.2-.032.402.024.806.136l.368.102c1.422.394 2.133.591 2.52.188c.388-.403.196-1.14-.19-2.613l-.099-.381c-.11-.419-.164-.628-.134-.835s.142-.389.365-.752l.203-.33c.786-1.276 1.179-1.914.924-2.426c-.254-.51-.987-.557-2.454-.648l-.379-.024c-.417-.026-.625-.039-.806-.135c-.18-.096-.314-.264-.58-.6m-5.869 9.324C6.698 14.37 4.919 16.024 4.248 18c-.752-4.707.292-7.747 1.965-9.637c.144.295.332.539.5.73c.35.396.852.82 1.362 1.251l.367.31l.17.145c.005.064.01.14.015.237l.03.485c.04.655.08 1.294.178 1.805"></path></svg></div>
+            <div class="card-content"><p class="title">Plan Premium</p><p class="plain"><span>Ilimitadas</span><span></span></p><p class="description">Genera documentos ilimitados. Asesoría prioritaria.</p><button class="card-btn" data-plan="premium">Elegir Plan Premium</button></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script src="dashboard.js"></script>
+  <!-- AI Modal: Chat rápido dentro del dashboard -->
+  <div id="aiModal" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;z-index:70">
+    <div style="background:#0f1113;padding:18px;border-radius:12px;max-width:720px;width:94%;color:#ddd;max-height:86vh;overflow:auto">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <h3 style="margin:0;color:#0ef">Asistente IA (Abogados)</h3>
+        <button id="aiClose" class="small-btn" style="background:transparent;border:1px solid rgba(255,255,255,0.06);">Cerrar</button>
+      </div>
+      <div style="margin-bottom:10px;color:#9aa">Esta IA está especializada en consultas legales. Solo acepta preguntas jurídicas relacionadas con leyes, contratos, demandas, plazos y procedimientos.</div>
+      <div class="ai-chat-wrap">
+        <div class="ai-chat-left">
+          <div class="chat-panel">
+            <textarea id="aiPrompt" placeholder="Escribe tu consulta legal aquí..." style="width:100%;min-height:120px;padding:12px;border-radius:8px;background:#0f1113;border:1px solid #222;color:#ddd"></textarea>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button id="aiSendBtn" class="small-btn">Enviar</button>
+              <button id="aiClearBtn" class="small-btn">Limpiar</button>
+            </div>
+            <div id="aiResponses" style="margin-top:12px;display:flex;flex-direction:column-reverse;gap:8px;max-height:40vh;overflow:auto"></div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <aside class="ai-examples">
+          <label style="color:#9aa;display:block;margin-bottom:6px">Preguntas de ejemplo</label>
+          <select id="aiExampleQuestions" size="14" style="width:100%;padding:8px;border-radius:6px;background:#0f1113;border:1px solid #222;color:#ddd"></select>
+          <div style="display:flex;gap:8px;flex-direction:column;margin-top:12px">
+            <button id="aiInsertExampleBtn" class="small-btn">Insertar en chat</button>
+            <button id="aiCopyExampleBtn" class="small-btn">Copiar</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating button to open AI modal -->
+  <button id="openAiBtn" title="Abrir Asistente IA" style="position:fixed;right:20px;bottom:20px;width:56px;height:56px;border-radius:50%;border:none;background:linear-gradient(180deg,#0ef,#3af);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;z-index:80;box-shadow:0 6px 18px rgba(0,0,0,0.5)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a7 7 0 0 0-7 7c0 3.867 3 6 7 11 4-5 7-7.133 7-11a7 7 0 0 0-7-7z" fill="#001"/></svg>
+  </button>
+  <!-- Profile modal -->
+  <div id="profileModal" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;z-index:60">
+    <div style="background:#0f1113;padding:18px;border-radius:12px;max-width:420px;width:90%;color:#ddd">
+      <h3 style="margin-top:0;color:#0ef">Mi perfil</h3>
+      <form id="profileForm">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label>Usuario (no editable)</label>
+          <input id="pfUsername" disabled style="padding:8px;border-radius:6px;background:#111;border:1px solid #222;color:#ddd">
+          <label>Nombre</label>
+          <input id="pfNombre" style="padding:8px;border-radius:6px;background:#111;border:1px solid #222;color:#ddd">
+          <label>Correo</label>
+          <input id="pfEmail" style="padding:8px;border-radius:6px;background:#111;border:1px solid #222;color:#ddd">
+          <label>Plan</label>
+          <select id="pfPlan" style="padding:8px;border-radius:6px;background:#111;border:1px solid #222;color:#ddd">
+            <option value="">Sin plan</option>
+            <option value="gratuito">Plan Gratuito</option>
+            <option value="institucional">Plan Institucional</option>
+            <option value="premium">Plan Premium</option>
+          </select>
+          <div id="profilePlanInfo" style="color:#bbb;font-size:0.9rem;margin-top:4px"></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+          <button type="button" id="pfCancel" class="small-btn">Cancelar</button>
+          <button type="submit" id="pfSave" class="small-btn">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+  <script src="animated-bg.js"></script>
+</body>
+</html>

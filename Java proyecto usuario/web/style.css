@@ -1,12 +1,19 @@
-*{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@400;600;700&display=swap');
+
+*{box-sizing:border-box}
+:root{
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-head: 'Montserrat', 'Poppins', 'Segoe UI', Arial, sans-serif;
+}
 hody{background:#f5f7fb;padding:20px;color:#222}
 /* Dark centered login layout (like the example) */
 /* Make container a neutral centered frame (no circular clipping) so the ring is always fully visible */
 .container{position:relative;width:460px;height:460px}
-body{background:#121212;margin:0;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center}
+hody{background:#f5f7fb;padding:20px;color:#222}
+body{font-family:var(--font-sans);background:#121212;margin:0;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;-webkit-font-smoothing:antialiased}
 .card{background:#ffffff;padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(12,24,36,0.06);margin-bottom:16px}
-h1{font-size:1.6rem;margin:0 0 12px}
-h2{font-size:1.1rem;margin:0 0 8px}
+h1{font-family:var(--font-head);font-weight:700;font-size:1.6rem;margin:0 0 12px;letter-spacing:0.2px}
+h2{font-family:var(--font-head);font-weight:600;font-size:1.1rem;margin:0 0 8px;letter-spacing:0.2px}
 label{display:block;margin:10px 0;color:#333;font-size:0.95rem}
 input,select,button,textarea{padding:10px;border:1px solid #d7dce4;border-radius:6px;width:100%;margin-top:6px;font-size:0.95rem}
 select{appearance:auto}
@@ -19,16 +26,149 @@ pre{background:#efefef;padding:12px;border-radius:6px;overflow:auto}
 .hidden{display:none}
 .muted{color:#666;font-size:0.95em}
 .actions{margin-top:12px;display:flex;gap:8px;align-items:center}
-.small-btn{padding:8px 12px;display:inline-block;width:auto;border-radius:6px;background:#f1f5fb;border:1px solid #d0d9f2}
+.small-btn{padding:8px 12px;display:inline-flex;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:auto;border-radius:6px;background:#f1f5fb;border:1px solid #d0d9f2;min-height:34px}
 .small-btn:hover{background:#e6eefb}
+
+/* Global button animations and unified appearance */
+:root{
+  --accent-1: #975af4;
+  --accent-2: #2f7cf8;
+  --accent-3: #0ef;
+  --btn-radius: 12px;
+  --btn-transition: 240ms cubic-bezier(.2,.9,.3,1);
+}
+
+button, .btn, .menu-btn, .small-btn{
+  transition: transform var(--btn-transition), box-shadow var(--btn-transition), filter var(--btn-transition), background-position 900ms ease;
+  will-change: transform, box-shadow;
+  border-radius: var(--btn-radius);
+  backface-visibility: hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+.menu-btn{
+  background-image: linear-gradient(90deg,var(--accent-1),var(--accent-2));
+  background-size:200% 100%;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  box-shadow: 0 6px 18px rgba(15,23,33,0.45);
+}
+.menu-btn:hover{
+  transform: translateY(-4px) scale(1.01);
+  background-position: 100% 0;
+  box-shadow: 0 18px 40px rgba(47,124,248,0.14);
+}
+.menu-btn:active{ transform: translateY(-1px) scale(0.998); }
+
+.btn, .menu-btn, .small-btn {
+  --border-color: linear-gradient(-45deg, #ffae00, #7e03aa, #00fffb);
+  --border-width: 0.125em;
+  --curve-size: 0.5em;
+  --blur: 30px;
+  --bg: #080312;
+  --color: #afffff;
+  color: var(--color);
+  cursor: pointer;
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  place-content: center;
+  padding: 0.5em 1.5em;
+  font-size: 17px;
+  border: 0;
+  text-transform: none;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
+  clip-path: polygon(
+    0% var(--curve-size),
+    var(--curve-size) 0,
+    100% 0,
+    100% calc(100% - var(--curve-size)),
+    calc(100% - var(--curve-size)) 100%,
+    0 100%
+  );
+  transition: color 250ms, transform 220ms cubic-bezier(.2,.9,.3,1), box-shadow 220ms;
+}
+
+.btn::before, .menu-btn::before, .small-btn::before,
+.btn::after, .menu-btn::after, .small-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.btn::before, .menu-btn::before, .small-btn::before {
+  background: var(--border-color);
+  background-size: 300% 300%;
+  animation: move-bg7234 5s ease infinite;
+  z-index: -2;
+}
+
+@keyframes move-bg7234 {
+  0% { background-position: 31% 0%; }
+  50% { background-position: 70% 100%; }
+  100% { background-position: 31% 0%; }
+}
+
+.btn::after, .menu-btn::after, .small-btn::after {
+  background: var(--bg);
+  z-index: -1;
+  clip-path: polygon(
+    var(--border-width) calc(var(--curve-size) + var(--border-width) * 0.5),
+    calc(var(--curve-size) + var(--border-width) * 0.5) var(--border-width),
+    calc(100% - var(--border-width)) var(--border-width),
+    calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+    calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)),
+    var(--border-width) calc(100% - var(--border-width))
+  );
+  transition: clip-path 500ms;
+}
+
+.btn:where(:hover, :focus)::after, .menu-btn:where(:hover, :focus)::after, .small-btn:where(:hover, :focus)::after {
+  clip-path: polygon(
+    calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+    calc(100% - var(--border-width)) var(--border-width),
+    calc(100% - var(--border-width)) var(--border-width),
+    calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+    calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)),
+    calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width))
+  );
+  transition: 200ms;
+}
+
+.btn:where(:hover, :focus), .menu-btn:where(:hover, :focus), .small-btn:where(:hover, :focus) { color: #fff; transform: translateY(-3px); }
+
+/* preserve previous simple full-width .btn used in login: provide utility */
+.btn--block{ width:100%; height:45px; border-radius:40px; padding:0; }
+
+/* subtle pulse/glow for primary controls */
+.glow{ animation: glowPulse 3.2s ease-in-out infinite; }
+@keyframes glowPulse{
+  0%{ box-shadow: 0 6px 18px rgba(47,124,248,0.06); }
+  50%{ box-shadow: 0 18px 38px rgba(47,124,248,0.10); }
+  100%{ box-shadow: 0 6px 18px rgba(47,124,248,0.06); }
+}
+
+/* Accessibility: focus ring */
+button:focus, .menu-btn:focus, .small-btn:focus, .btn:focus{ outline: none; box-shadow: 0 0 0 4px rgba(14,239,255,0.08), 0 10px 28px rgba(0,0,0,0.6); }
+
 
 /* Login result / messages */
 #loginResult{margin-top:10px}
 #loginResult strong{color:#0b6efd}
 #loginResult .error{color:#b00020}
 
-/* Register success panel */
-#registerSuccess{margin-top:12px;background:#f6fffa;border:1px solid #dff7e6;padding:12px;border-radius:6px}
+/* Register success: show only text (no white filled box) */
+#registerSuccess{
+  margin-top:12px;
+  background:transparent !important;
+  border:none !important;
+  padding:0 !important;
+  color:#e6fff8 !important; /* light/cyan text for contrast on dark bg */
+}
+
+/* make the small message less prominent but legible */
+#registerSuccess .muted{ color: rgba(230,255,248,0.8) !important }
 
 /* Responsive */
 @media (max-width:600px){
@@ -158,6 +298,225 @@ pre{background:#efefef;padding:12px;border-radius:6px;overflow:auto}
 #registerView #extra .input-box{position:relative;margin:14px 0}
 #registerView #extra .input-box input{width:100%;}
 
+/* Admin panel specific styles: make add-user inputs light and tidy the users table */
+.admin-panel .input-box input,
+.admin-panel select,
+.admin-panel #extra input,
+.admin-panel .input-box textarea{
+  background: #eaf2ff !important;
+  color: #0b1220 !important;
+  border: none !important;
+  border-radius: 40px !important;
+  height:45px !important;
+  padding:0 15px !important;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.6) !important;
+}
+
+/* Ensure select inside admin looks like inputs */
+.admin-panel select{appearance:none; -webkit-appearance:none; background: #eaf2ff !important}
+
+/* Tidy table header/rows and make the users list larger and more readable */
+.admin-panel #usersTable{border-collapse:separate; border-spacing:0 10px; width:100%; table-layout:auto; font-size:1.05rem}
+.admin-panel #usersTable thead th{border-bottom:none;padding:14px 18px;color:#fff; background:rgba(0,0,0,0.16);}
+.admin-panel #usersTable tbody tr{background:rgba(255,255,255,0.02); border-radius:8px;}
+.admin-panel #usersTable tbody td{padding:16px 18px;word-break:break-word;white-space:normal}
+.admin-panel #usersTable tbody td:nth-child(1){width:18%}
+.admin-panel #usersTable tbody td:nth-child(2){width:28%}
+.admin-panel #usersTable tbody td:nth-child(3){width:38%}
+.admin-panel #usersTable tbody td:nth-child(4){width:12%}
+.admin-panel #usersTable tbody td:nth-child(5){width:8%;text-align:right}
+
+/* Make wrapper larger and scrollable so the list is visible and not tiny */
+.admin-panel #usersTableWrapper{
+  width:100%;
+  max-width:1180px;
+  margin:0 auto 24px;
+  padding:20px;
+  min-height:240px;
+  max-height:720px;
+  overflow:auto;
+  background:rgba(0,0,0,0.18);
+  border-radius:10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45) inset;
+}
+
+/* ADMIN PANEL LAYOUT TWEAKS: make the panel wider and more readable */
+.container.admin-panel{width:100%;padding:40px 20px}
+.admin-panel .login-box{position:static !important; left:auto !important; top:auto !important; transform:none !important; margin:40px auto !important; width:100% !important; max-width:1180px !important; padding:36px !important; box-sizing:border-box}
+.admin-panel .input-box{margin:14px 0}
+.admin-panel .input-box input{height:48px !important; padding:0 18px !important; border-radius:32px !important}
+
+.admin-panel #usersTable thead th, .admin-panel #usersTable tbody td{padding:14px 16px}
+.admin-panel #usersTable tbody td{font-size:1rem}
+
+/* Color the role column blue and emphasize it */
+.admin-panel #usersTable tbody td:nth-child(4){color:var(--accent-2);font-weight:700;text-transform:capitalize}
+.admin-panel #usersTable tbody td:nth-child(5){text-align:right}
+
+/* Make action buttons in the table match the UI theme */
+.admin-panel #usersTable button{padding:8px 14px;border-radius:10px;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;border:none;cursor:pointer}
+.admin-panel #usersTable button:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(47,124,248,0.18)}
+
+/* Role badge: pill used in users table to highlight role */
+.role-badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background: transparent;
+  color: var(--accent-2);
+  border: 1px solid rgba(47,124,248,0.18);
+  font-weight:700;
+  font-size:0.95rem;
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+}
+
+/* Stronger admin-specific override to ensure role text is blue in admin views */
+.admin-panel #usersTable .role-badge{
+  color: var(--accent-2) !important;
+  border-color: rgba(47,124,248,0.9) !important;
+  background: rgba(47,124,248,0.04) !important;
+  box-shadow: 0 2px 8px rgba(47,124,248,0.06) inset;
+}
+
+/* Add form stretch and a more prominent Add button */
+.admin-panel form#adminAddForm{display:block;width:100%}
+.admin-panel form#adminAddForm .actions{justify-content:flex-end}
+.admin-panel form#adminAddForm .btn{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;padding:10px 16px;border-radius:12px;border:none}
+.admin-panel form#adminAddForm .btn:hover{transform:translateY(-3px)}
+
+/* Show labels above inputs in admin panel (always visible) */
+.admin-panel .input-box{position:relative;margin:14px 0}
+.admin-panel .input-box label{
+  position:absolute;
+  top:-14px !important;
+  left:12px !important;
+  transform:none !important;
+  font-size:0.85em !important;
+  color:#0ef !important;
+  background:transparent !important;
+  padding:0 6px !important;
+  pointer-events:none;
+}
+
+/* ----------------------------- */
+/* Animated gradient background */
+/* Adds a dreamy, blurred animated gradient similar to the provided image */
+.animated-bg{position:relative;min-height:100vh;overflow:hidden}
+.animated-bg::before{
+  content:"";
+  position:fixed;inset:0;z-index:-2;pointer-events:none;
+  /* Base linear gradient (user requested palette) followed by soft radial lights */
+  background:
+    /* soft radial highlights (topmost) */
+    radial-gradient(40% 30% at var(--g1x,10%) var(--g1y,60%), rgba(150,90,244,0.95) 0%, rgba(150,90,244,0.08) 40%, transparent 60%),
+    radial-gradient(50% 36% at var(--g2x,90%) var(--g2y,40%), rgba(9,158,156,0.9) 0%, rgba(9,158,156,0.06) 35%, transparent 60%),
+    radial-gradient(70% 18% at var(--g3x,50%) var(--g3y,50%), rgba(255,255,255,0.95) 0%, rgba(200,180,255,0.06) 28%, transparent 65%),
+    /* base gradient layer (bottom) */
+    linear-gradient(90deg, rgba(68,48,112,1) 0%, rgba(68,48,112,1) 20%, rgba(0,0,0,1) 45%, rgba(9,158,156,1) 100%);
+  background-blend-mode: screen, screen, overlay, normal;
+  filter: blur(12px) saturate(170%);
+  transform: scale(1.02);
+  /* allow JS to move the base gradient and the radial layers independently */
+  background-position: var(--p1, 50% 50%), var(--g1x,10%) var(--g1y,60%), var(--g2x,90%) var(--g2y,40%), var(--g3x,50%) var(--g3y,50%);
+  background-size: 180% 180%, 140% 140%, 160% 160%, 200% 200%;
+  /* remove autonomous animation; movement will be driven by cursor via JS */
+  animation: none;
+  will-change: background-position, transform;
+}
+.animated-bg::after{
+  /* subtle center streak to emulate the bright center of the photo */
+  content:"";
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background: radial-gradient(40% 6% at var(--base-pos,50% 50%), rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.02) 35%, transparent 60%),
+              linear-gradient(90deg, rgba(68,48,112,1) 0%, rgba(68,48,112,1) 18%, rgba(0,0,0,1) 45%, rgba(9,158,156,1) 100%);
+  mix-blend-mode: overlay; opacity: var(--mix, 0.09); filter: blur(18px) saturate(120%);
+  /* no autonomous pulsing; cursor will control mixing */
+  animation: none;
+}
+
+@keyframes animatedGradientMove{
+  0%{
+    background-position: 10% 60%, 90% 40%, 50% 50%;
+    transform: scale(1.02) translateY(0px);
+  }
+  50%{
+    background-position: 30% 40%, 70% 60%, 45% 48%;
+    transform: scale(1.03) translateY(-8px);
+  }
+  100%{
+    background-position: 5% 50%, 95% 30%, 55% 52%;
+    transform: scale(1.02) translateY(0px);
+  }
+}
+
+@keyframes centerPulse{
+  0%{opacity:0.9;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.02)}
+  100%{opacity:0.9;transform:scale(1)}
+}
+
+/* ensure darker UI elements remain readable on top */
+.animated-bg .card, .animated-bg .container, .animated-bg .login-box{position:relative;z-index:2}
+
+/* small utility: let any full-screen sections opt-in to reduced motion */
+.animated-bg.reduce-motion::before,
+.animated-bg.reduce-motion::after{animation: none !important}
+
+/* End animated gradient block */
+
+/* Ripple effect on click: expanding mixed-color wave */
+.ripple{
+  position:fixed;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%) scale(0);
+  width:20px;height:20px;opacity:0;z-index:0;mix-blend-mode:screen;filter:blur(12px) saturate(140%);
+  /* reduce white center and overall intensity to avoid flashing the screen */
+  background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, rgba(68,48,112,0.14) 30%, rgba(9,158,156,0.14) 70%, transparent 100%);
+  will-change: transform, opacity;
+  transition: transform 700ms cubic-bezier(.2,.9,.25,1), opacity 700ms ease-out;
+}
+.ripple.ripple--grow{ transform: translate(-50%,-50%) scale(40); opacity:0.28; }
+
+/* Accessible fallback: stop animation if user requests reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .ripple{ transition: none !important; transform:none !important; opacity:0.12 !important }
+}
+
+/* Local mix spot that follows the cursor and blends base colors locally */
+.mix-spot{
+  position:fixed;left:0;top:0;pointer-events:none;z-index:0;transform:translate(-50%,-50%);
+  width:120px;height:120px;border-radius:50%;opacity:0;mix-blend-mode:overlay;filter:blur(8px) saturate(160%);
+  background: radial-gradient(circle at center, rgba(255,255,255,0.22) 0%, rgba(68,48,112,0.95) 22%, rgba(9,158,156,0.95) 66%, transparent 100%);
+  transition: opacity 180ms cubic-bezier(.2,.9,.25,1), transform 120ms cubic-bezier(.2,.9,.25,1);
+  will-change: transform, opacity;
+}
+@media (prefers-reduced-motion: reduce){ .mix-spot{ transition:none !important; opacity:0.16 !important } }
+
+/* Particles that leave a white trail under the cursor */
+.mix-particle{
+  position:fixed;left:0;top:0;pointer-events:none;z-index:0;
+  width:12px;height:12px;background:rgba(255,255,255,0.98);filter:blur(0px) saturate(170%);
+  transform:translate(-50%,-50%) scale(1);opacity:1;will-change:transform,opacity;
+  /* star shape */
+  -webkit-clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  box-shadow: 0 0 12px rgba(255,255,255,0.68);
+}
+@keyframes particleFloat{
+  0%{ transform: translate(-50%,-50%) scale(1) rotate(0deg); opacity:1 }
+  60%{ opacity:0.9 }
+  100%{ transform: translate(calc(-50% + var(--dx,0px)), calc(-50% + var(--dy,0px))) scale(0.2) rotate(140deg); opacity:0 }
+}
+
+/* reduced motion fallback */
+@media (prefers-reduced-motion: reduce){
+  .mix-particle{ animation:none !important; opacity:0.6 !important }
+}
+
+
+/* Ensure inputs have a small gap from label */
+.admin-panel .input-box input,
+.admin-panel .input-box select{margin-top:8px}
+
 .login-box{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:320px;z-index:4;padding:28px;border-radius:16px;background:rgba(15,23,33,0.95);box-shadow:0 10px 30px rgba(0,0,0,0.6);display:block}
 .login-box h2{font-size:1.6rem;color:#0ef;text-align:center;margin:0 0 12px}
 .login-box form{width:100%;padding:0 6px}
@@ -168,7 +527,7 @@ pre{background:#efefef;padding:12px;border-radius:6px;overflow:auto}
 .input-box label{position:absolute;top:50%;left:15px;transform:translateY(-50%);font-size:1em;pointer-events:none;transition:0.5s;color:#fff}
 .forgot-pass{margin:-6px 0 10px;text-align:center}
 .forgot-pass a{font-size:0.85em;color:#fff;text-decoration:none}
-.btn{width:100%;height:45px;background:#0ef;border:none;outline:none;border-radius:40px;cursor:pointer;font-size:1em;color:#1f293a;font-weight:600}
+.btn{width:auto}
 .signup-link{margin:10px 0;text-align:center}
 .signup-link a{font-size:1em;color:#0ef;text-decoration:none;font-weight:600}
 
@@ -176,7 +535,7 @@ pre{background:#efefef;padding:12px;border-radius:6px;overflow:auto}
 .hidden{display:none}
 .muted{color:#cfe8ff;font-size:0.95em}
 .actions{margin-top:12px;display:flex;gap:8px;align-items:center}
-.small-btn{padding:8px 12px;display:inline-block;width:auto;border-radius:6px;background:#f1f5fb;border:1px solid #d0d9f2}
+.small-btn{padding:8px 12px;display:inline-flex;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:auto;border-radius:6px;background:#f1f5fb;border:1px solid #d0d9f2;min-height:34px}
 .small-btn:hover{background:#e6eefb}
 
 /* Users list card override for dark background contrast */
@@ -224,6 +583,69 @@ pre{background:#efefef;padding:12px;border-radius:6px;overflow:auto}
 .login-box input{color:#fff;border-color:rgba(255,255,255,0.12)}
 .login-box label{color:rgba(255,255,255,0.7)}
 
+/* From Uiverse.io by Nawsome: decorative SVG frame */
+.svg-frame {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.svg-frame svg {
+  position: absolute;
+  transition: .5s;
+  z-index: calc(1 - (0.2 * var(--j)));
+  transform-origin: center;
+  width: 344px;
+  height: 344px;
+  fill: none;
+}
+
+.svg-frame:hover svg {
+  transform: rotate(-80deg) skew(30deg) translateX(calc(45px * var(--i))) translateY(calc(-35px * var(--i)));
+}
+
+.svg-frame svg #center {
+  transition: .5s;
+  transform-origin: center;
+}
+
+.svg-frame:hover svg #center {
+  transform: rotate(-30deg) translateX(45px) translateY(-3px);
+}
+
+#out2 {
+  animation: rotate16 7s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+#out3 {
+  animation: rotate16 3s ease-in-out infinite alternate;
+  transform-origin: center;
+  stroke: #ff0;
+}
+
+#inner3,
+#inner1 {
+  animation: rotate16 4s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+#center1 {
+  fill: #ff0;
+  animation: rotate16 2s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+@keyframes rotate16 {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Normalize browser autofill and ensure register inputs match login styling */
 #registerView .input-box input:-webkit-autofill,
 #registerView .input-box input:-webkit-autofill:focus,
@@ -245,3 +667,134 @@ pre{background:#efefef;padding:12px;border-radius:6px;overflow:auto}
   height:45px;
   padding:0 15px;
 }
+
+/* Ensure login view inputs (usuario/clave) match and override any conflicting rules */
+#loginView .input-box input{
+  background: transparent !important;
+  color: #fff !important;
+  border: 2px solid rgba(255,255,255,0.12) !important;
+  border-radius: 40px !important;
+  height: 45px !important;
+  padding: 0 15px !important;
+}
+
+/* Center the login button in the login view and keep a compact width */
+#loginView form > .btn{
+  display: block;
+  margin: 14px auto 0 auto;
+  width: auto;
+  padding: 0.5em 1.6em;
+}
+
+/* From Uiverse.io by dexter-st: startup text loader */
+.loader-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 180px;
+  font-family: "Inter", sans-serif;
+  font-size: 1.2em;
+  font-weight: 300;
+  color: white;
+  border-radius: 50%;
+  background-color: transparent;
+  user-select: none;
+  margin: 0 auto 18px auto;
+  z-index: 40; /* sit above background animation */
+}
+
+.loader-wrapper.hidden{ display: none !important; }
+
+.loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background-color: transparent;
+  animation: loader-rotate 2s linear infinite;
+  z-index: 0;
+}
+
+@keyframes loader-rotate {
+  0% {
+    transform: rotate(90deg);
+    box-shadow:
+      0 10px 20px 0 #fff inset,
+      0 20px 30px 0 #ad5fff inset,
+      0 60px 60px 0 #471eec inset;
+  }
+  50% {
+    transform: rotate(270deg);
+    box-shadow:
+      0 10px 20px 0 #fff inset,
+      0 20px 10px 0 #d60a47 inset,
+      0 40px 60px 0 #311e80 inset;
+  }
+  100% {
+    transform: rotate(450deg);
+    box-shadow:
+      0 10px 20px 0 #fff inset,
+      0 20px 30px 0 #ad5fff inset,
+      0 60px 60px 0 #471eec inset;
+  }
+}
+
+.loader-letter {
+  display: inline-block;
+  opacity: 0.4;
+  transform: translateY(0);
+  animation: loader-letter-anim 2s infinite;
+  z-index: 1;
+  border-radius: 50ch;
+  border: none;
+  margin: 0 2px;
+}
+
+.loader-letter:nth-child(1) { animation-delay: 0s; }
+.loader-letter:nth-child(2) { animation-delay: 0.1s; }
+.loader-letter:nth-child(3) { animation-delay: 0.2s; }
+.loader-letter:nth-child(4) { animation-delay: 0.3s; }
+.loader-letter:nth-child(5) { animation-delay: 0.4s; }
+.loader-letter:nth-child(6) { animation-delay: 0.5s; }
+.loader-letter:nth-child(7) { animation-delay: 0.6s; }
+.loader-letter:nth-child(8) { animation-delay: 0.7s; }
+.loader-letter:nth-child(9) { animation-delay: 0.8s; }
+.loader-letter:nth-child(10){ animation-delay: 0.9s; }
+
+@keyframes loader-letter-anim {
+  0%, 100% { opacity: 0.4; transform: translateY(0); }
+  20% { opacity: 1; transform: scale(1.15); }
+  40% { opacity: 0.7; transform: translateY(0); }
+}
+
+/* When starting, keep main content hidden while the loader overlay plays */
+.startup-hidden .container > :not(#startupLoader) {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Make the startup loader an overlay so it appears before everything */
+#startupLoader {
+  position: fixed !important;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  z-index: 9999;
+}
+
+@media (max-width:600px){
+  #startupLoader { width: 140px; height: 140px; }
+}
+
+/* Hide the colorful blob inside the .ring during normal login view.
+   Show it only while the startup overlay is active (body.startup-hidden). */
+.ring .loader{ display: none !important; }
+.startup-hidden .ring .loader{ display: block !important; }
+
