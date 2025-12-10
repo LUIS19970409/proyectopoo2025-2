@@ -1,7 +1,7 @@
 package com.example.users;
 
 public class Administrador extends Usuario {
-    private int nivel;
+    private final int nivel;
 
     public Administrador(String username, String password, String nombre, String email, int nivel) {
         super(username, password, nombre, email);
@@ -12,4 +12,9 @@ public class Administrador extends Usuario {
 
     @Override
     public String getRole() { return "ADMIN"; }
+
+    @Override
+    public String getRoleDescription() {
+        return "Administrador (nivel: " + nivel + ")";
+    }
 }

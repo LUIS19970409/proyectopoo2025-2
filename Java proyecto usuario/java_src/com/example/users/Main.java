@@ -25,15 +25,21 @@ public class Main {
             System.out.println("Error guardando: " + e.getMessage());
         }
 
-        // Autenticacion sencilla por consola
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Usuario: "); String u = sc.nextLine();
-        System.out.print("Clave: "); String p = sc.nextLine();
-        if (um.autenticar(u,p)) {
-            System.out.println("Autenticado! -> " + u);
-        } else {
-            System.out.println("Credenciales invalidas.");
+        // Demostración de polimorfismo: cada usuario puede describir su rol
+        System.out.println("-- Descripciones por rol (polimorfismo) --");
+        for (Usuario ux : um.getUsuarios()) {
+            System.out.println(ux.getUsername() + " -> " + ux.getRole() + " : " + ux.getRoleDescription());
         }
-        sc.close();
+
+        // Autenticacion sencilla por consola
+        try (Scanner sc = new Scanner(System.in)) {
+            System.out.print("Usuario: "); String u = sc.nextLine();
+            System.out.print("Clave: "); String p = sc.nextLine();
+            if (um.autenticar(u,p)) {
+                System.out.println("Autenticado! -> " + u);
+            } else {
+                System.out.println("Credenciales invalidas.");
+            }
+        }
     }
 }

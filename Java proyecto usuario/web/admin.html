@@ -6,7 +6,7 @@
   <title>Panel Admin</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="animated-bg">
+<body style="background:#121212">
   <div class="container admin-panel">
     <div class="login-box" style="width:720px; max-width:95%; text-align:center; padding:28px;">
       <h2>Panel Admin</h2>
@@ -88,6 +88,5 @@
       if(btnLogout){ btnLogout.addEventListener('click', ()=>{ try{ sessionStorage.removeItem(CURRENT_USER_KEY); }catch(e){}; showLogin(); }); }
     })();
   </script>
-  <script src="animated-bg.js"></script>
 </body>
 </html>

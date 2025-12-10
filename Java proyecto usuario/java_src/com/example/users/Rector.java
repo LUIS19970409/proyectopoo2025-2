@@ -1,7 +1,7 @@
 package com.example.users;
 
 public class Rector extends Usuario {
-    private String facultad;
+    private final String facultad;
 
     public Rector(String username, String password, String nombre, String email, String facultad) {
         super(username, password, nombre, email);
@@ -12,4 +12,9 @@ public class Rector extends Usuario {
 
     @Override
     public String getRole() { return "RECTOR"; }
+
+    @Override
+    public String getRoleDescription() {
+        return "Rector de la facultad: " + (facultad == null || facultad.isEmpty() ? "(no especificada)" : facultad);
+    }
 }

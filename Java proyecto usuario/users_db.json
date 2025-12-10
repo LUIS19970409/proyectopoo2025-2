@@ -11,9 +11,9 @@
     "password": "rector123",
     "role": "RECTOR",
     "nombre": "Rector",
+    "facultad": "Ciencias",
     "email": "rector@example.com",
-    "username": "rector",
-    "facultad": "Ciencias"
+    "username": "rector"
   },
   {
     "password": "abog123",
@@ -22,29 +22,6 @@
     "especialidad": "Penal",
     "email": "abog@example.com",
     "username": "abog"
-  },
-  {
-    "password": "admin123",
-    "role": "ADMIN",
-    "nombre": "Admin",
-    "nivel": 9,
-    "email": "admin@example.com",
-    "username": "admin"
-  },
-  {
-    "password": "rector123",
-    "role": "RECTOR",
-    "nombre": "Rector",
-    "email": "rector@example.com",
-    "username": "rector",
-    "facultad": "Ciencias"
-  },
-  {
-    "password": "abog123",
-    "role": "ABOGADO",
-    "nombre": "Abogado",
-    "especialidad": "Penal",
-    "email": "abog@example.com",
-    "username": "abog"
+  
   }
 ]

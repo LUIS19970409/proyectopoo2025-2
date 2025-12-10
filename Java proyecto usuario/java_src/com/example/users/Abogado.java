@@ -1,7 +1,7 @@
 package com.example.users;
 
 public class Abogado extends Usuario {
-    private String especialidad;
+    private final String especialidad;
 
     public Abogado(String username, String password, String nombre, String email, String especialidad) {
         super(username, password, nombre, email);
@@ -12,4 +12,9 @@ public class Abogado extends Usuario {
 
     @Override
     public String getRole() { return "ABOGADO"; }
+
+    @Override
+    public String getRoleDescription() {
+        return "Abogado especializado en: " + (especialidad == null || especialidad.isEmpty() ? "(no especificado)" : especialidad);
+    }
 }
